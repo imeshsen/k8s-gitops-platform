@@ -1,0 +1,75 @@
+openapi: 3.0.3
+info:
+  title: Java App API
+  description: Simple API for testing /api/hello and /api/add
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local server
+paths:
+  /api/hello:
+    get:
+      summary: Greet a user
+      parameters:
+        - name: name
+          in: query
+          description: Name of the person to greet
+          required: false
+          schema:
+            type: string
+            default: "World"
+      responses:
+        '200':
+          description: Successful greeting
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                required: [message]
+              examples:
+                example-1:
+                  value:
+                    message: "Hello, Alice!"
+  /api/add:
+    get:
+      summary: Add two integers
+      parameters:
+        - name: a
+          in: query
+          description: First integer
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: b
+          in: query
+          description: Second integer
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: Sum result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a:
+                    type: integer
+                  b:
+                    type: integer
+                  sum:
+                    type: integer
+                required: [a,b,sum]
+              examples:
+                example-1:
+                  value:
+                    a: 2
+                    b: 3
+                    sum: 5
+components: {}

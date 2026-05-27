@@ -1,0 +1,15 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+target/
+
+# IntelliJ
+*.iml
+.idea/
+
+# VS Code
+.vscode/
