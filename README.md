@@ -16,12 +16,12 @@ k8s-gitops-platform/
 │   ├── frontend/               # React/Vite client Helm chart
 │   └── backend/                # Spring Boot API Service Helm chart
 │
-├── argocd manifests/           # Continuous Deployment Manifests
+├── argocd-manifests/           # Continuous Deployment Manifests
 │   ├── app-of-apps.yaml        # ArgoCD Root Application (App of Apps pattern)
 │   ├── frontend-app.yaml       # Frontend service CD configuration
 │   └── backend-app.yaml        # Backend API service CD configuration
 │
-├── application sourcecodes/    # Source Application Code
+├── application-sourcecodes/    # Source Application Code
 │   ├── frontend/               # React/Vite web client (served on port 3000)
 │   └── backend/                # Spring Boot API (served on port 8080)
 │
@@ -53,13 +53,13 @@ version: '3.8'
 services:
   backend:
     build:
-      context: "./application sourcecodes/backend"
+      context: "./application-sourcecodes/backend"
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
   frontend:
     build:
-      context: "./application sourcecodes/frontend"
+      context: "./application-sourcecodes/frontend"
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
@@ -81,7 +81,7 @@ The frontend will be available at `http://localhost:3000` and will automatically
 Apply the root application configuration to trigger the ArgoCD App‑of‑Apps synchronization engine:
 
 ```bash
-kubectl apply -f "argocd manifests/app-of-apps.yaml"
+kubectl apply -f argocd-manifests/app-of-apps.yaml
 ```
 
 ---
