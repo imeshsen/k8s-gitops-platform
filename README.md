@@ -13,16 +13,15 @@ k8s-gitops-platform/
 │   └── outputs.tf              # Cloud outputs (Cluster Endpoints, Regions)
 │
 ├── helm/                       # Application Packaging
-│   ├── frontend/               # Nginx Static Dashboard Helm chart
-│   ├── backend/                # Node.js API Service Helm chart
-│   └── monitoring/             # Grafana + Prometheus stack chart
+│   ├── frontend/               # React/Vite client Helm chart
+│   └── backend/                # Spring Boot API Service Helm chart
 │
-├── argocd/                     # Continuous Deployment Manifests
+├── argocd manifests/           # Continuous Deployment Manifests
 │   ├── app-of-apps.yaml        # ArgoCD Root Application (App of Apps pattern)
 │   ├── frontend-app.yaml       # Frontend service CD configuration
 │   └── backend-app.yaml        # Backend API service CD configuration
 │
-├── apps/                       # Source Application Code
+├── application sourcecodes/    # Source Application Code
 │   ├── frontend/               # React/Vite web client (served on port 3000)
 │   └── backend/                # Spring Boot API (served on port 8080)
 │
@@ -47,17 +46,21 @@ terraform apply
 ```
 
 ### 2. Run Applications Locally with Docker
-You can test the application components locally using Docker. A simple `docker-compose.yaml` is provided in the repository root.
+You can test the application components locally using Docker. A `docker-compose.yaml` is provided in the repository root.
 
 ```yaml
 version: '3.8'
 services:
   backend:
-    build: ./apps/backend
+    build:
+      context: "./application sourcecodes/backend"
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
   frontend:
-    build: ./apps/frontend
+    build:
+      context: "./application sourcecodes/frontend"
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
@@ -78,14 +81,14 @@ The frontend will be available at `http://localhost:3000` and will automatically
 Apply the root application configuration to trigger the ArgoCD App‑of‑Apps synchronization engine:
 
 ```bash
-kubectl apply -f argocd/app-of-apps.yaml
+kubectl apply -f "argocd manifests/app-of-apps.yaml"
 ```
 
 ---
 
 ## Security Practices
 - All container base images use minimal‑footprint `alpine` builds to minimise attack surface.
-- The Spring Boot backend runs under an unprivileged user (node) rather than root.
+- The Spring Boot backend runs under an unprivileged user (`spring`) rather than root, and the frontend runs under `node`.
 - Resource constraints (`requests`/`limits`) are explicitly defined on all Helm charts to prevent Denial‑of‑Service attacks.
 
 ---
