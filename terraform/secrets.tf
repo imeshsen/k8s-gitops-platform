@@ -1,7 +1,7 @@
-resource "kubernetes_secret" "generic_secret" {
+resource "kubernetes_secret_v1" "secret" {
   metadata {
-    name      = "generic-secret"
-    namespace = kubernetes_namespace.k8s.metadata[0].name
+    name = "basic-auth"
+    namespace = var.namespace
   }
 
   data = {
@@ -9,5 +9,5 @@ resource "kubernetes_secret" "generic_secret" {
     password = var.password
   }
 
-  type = "Opaque"
+  type = "kubernetes.io/basic-auth"
 }

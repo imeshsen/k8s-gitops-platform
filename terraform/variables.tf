@@ -10,3 +10,9 @@ variable "password" {
   default     = "1234"
   sensitive   = true
 }
+
+variable "namespace" {
+  type        = string
+  description = "The namespace for the applications"
+  default     = "k8s"
+}
