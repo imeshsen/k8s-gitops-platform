@@ -1,6 +1,6 @@
 resource "kubernetes_secret_v1" "secret" {
   metadata {
-    name = "basic-auth"
+    name      = "basic-auth"
     namespace = var.namespace
   }
 
