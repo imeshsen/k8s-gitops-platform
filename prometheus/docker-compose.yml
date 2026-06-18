@@ -4,8 +4,8 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
 
 # No named volumes needed; comment out if you want to keep for future use
-# volumes:
-#   prometheus:
+volumes:
+  prometheus:
