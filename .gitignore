@@ -1,0 +1,58 @@
+.vscode/
+
+# ==========================================
+# Terraform
+# ==========================================
+# Local micro-plugins, webcheckpoints, and symbols
+.terraform/
+
+# Lock file (.terraform.lock.hcl)
+# NOTE: It is generally RECOMMENDED to commit this file to source control 
+# so Terraform can guarantee identical dependency versions. 
+# Uncomment the line below ONLY if you have a specific reason to ignore it.
+#.terraform.lock.hcl
+
+# State files (CONTAINS SENSITIVE DATA)
+*.tfstate
+*.tfstate.*
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Exclude all variable files with secrets
+*.tfvars
+*.tfvars.json
+
+# Override files (local overrides)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+
+# ==========================================
+# Helm
+# ==========================================
+# Helm charts dependencies (can be re-downloaded via 'helm dependency build')
+charts/
+charts/
+charts/*.tgz
+
+# Helm local repository cache and configurations
+.helm/
+
+# Kubeconfig files (if you accidentally save them in the project root)
+.kube/
+kubeconfig
+*kubeconfig*
+
+# ==========================================
+# General / Environment Secrets
+# ==========================================
+.env
+.env.*
