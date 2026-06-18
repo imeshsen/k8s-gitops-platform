@@ -1,4 +1,44 @@
+# ==========================================
+# IDEs and Text Editors
+# ==========================================
+# VS Code
 .vscode/
+# Exception: If you want to share team settings/extensions, uncomment these:
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ / JetBrains (PyCharm, WebStorm, Idea, etc.)
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# Vim
+*~
+*.swp
+*.swo
+
+# Sublimetext
+*.sublime-project
+*.sublime-workspace
+
+
+# ==========================================
+# Python / Build Tools / Miscellaneous
+# ==========================================
+# Python caching (often used with local scripting, Antigravity, hooks)
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+
+# Local history or scratch files
+.history/
+scratch/
 
 # ==========================================
 # Terraform
