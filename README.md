@@ -128,3 +128,14 @@ kubectl apply -f argocd-manifests/app-of-apps.yaml
 
 ---
 
+## Helm Notes for Grafana
+- How to get admin username and password
+  List helm charts in your namespace
+    helm list -n monitoring
+  Retrive admin password for your chart
+    kubectl get secret --namespace monitoring your_chart_name -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+  
+- Access the grafana dashboard
+  kubectl port-forward svc/grafana 8081:80 --address 0.0.0.0.0
+
+---
