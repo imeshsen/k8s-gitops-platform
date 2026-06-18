@@ -7,28 +7,57 @@ A production‑grade, GitOps‑ready Kubernetes deployment skeleton structuring 
 ```
 k8s-gitops-platform/
 │
-├── terraform/                  # Infrastructure as Code (IaC)
-│   ├── main.tf                 # EKS variable resources and local declarations
-│   ├── providers.tf            # AWS, Kubernetes, Helm providers configuration
-│   └── outputs.tf              # Cloud outputs (Cluster Endpoints, Regions)
-│
-├── helm/                       # Application Packaging
-│   ├── frontend/               # React/Vite client Helm chart
-│   └── backend/                # Spring Boot API Service Helm chart
+├── application-sourcecodes/    # Source Application Code
+│   ├── backend/                # Spring Boot API (served on port 8080)
+│   │   ├── Dockerfile          # Multi-stage build configuration for Java
+│   │   ├── openapi.yaml        # API contracts and specifications
+│   │   ├── pom.xml             # Maven dependencies configuration
+│   │   └── src/                # Spring Boot Application source code
+│   │
+│   ├── docker-compose.yaml     # Local multi-container development environment
+│   │
+│   └── frontend/               # React / TypeScript Vite web client
+│       ├── Dockerfile          # Multi-stage production Nginx deployment
+│       ├── eslint.config.js    # Linting rules matching team standards
+│       ├── index.html          # Application entry point
+│       ├── nginx.conf          # Custom optimized reverse proxy / routing
+│       ├── package.json        # Frontend project metadata and dependencies
+│       ├── public/             # Static web assets (favicons, vectors)
+│       ├── src/                # Application components (TSX, CSS styles)
+│       └── tsconfig*.json      # TypeScript compiler workspace configurations
 │
 ├── argocd-manifests/           # Continuous Deployment Manifests
-│   ├── app-of-apps.yaml        # ArgoCD Root Application (App of Apps pattern)
-│   ├── frontend-app.yaml       # Frontend service CD configuration
-│   └── backend-app.yaml        # Backend API service CD configuration
+│   ├── app-of-apps.yaml        # ArgoCD Root Application (App-of-Apps pattern)
+│   ├── backend-app.yaml        # Backend service target tracking and sync policy
+│   └── frontend-app.yaml       # Frontend web client declarative sync policy
 │
-├── application-sourcecodes/    # Source Application Code
-│   ├── frontend/               # React/Vite web client (served on port 3000)
-│   └── backend/                # Spring Boot API (served on port 8080)
+├── helm/                       # Enterprise Application Packaging
+│   ├── backend/                # Spring Boot service Helm chart configuration
+│   │   ├── Chart.yaml          # Packaging metadata and semantic versioning
+│   │   ├── templates/          # K8s objects (Deployment, HPA, Ingress, SVC)
+│   │   └── values.yaml         # Environment defaults and resource limits
+│   │
+│   └── frontend/               # Single Page Application Helm chart definition
+│       ├── Chart.yaml          # Web client package manifest
+│       ├── templates/          # Declarative K8s resources engine
+│       └── values.yaml         # Configurable parameters (replicas, image tags)
 │
-├── ingress/                    # Global Routing Policies
-│   └── nginx-ingress.yaml      # Nginx Ingress proxy paths configuration
+├── ingress/                    # Global Cluster Entrypoints
+│   └── nginx-ingress.yaml      # Path-based routing rules mappings
 │
-└── README.md                   # This file
+├── shellScripts/               # Platform Operator Automation Utilities
+│   ├── helm.sh                 # Routine chart validation and package manager
+│   ├── switchNS.sh             # Active Kubernetes namespace contextual toggle
+│   └── terraform.sh            # Idempotent cloud infrastructure deployment wrap
+│
+└── terraform/                  # Infrastructure as Code (IaC) Workspace
+├── grafana.tf              # Monitoring dashboards & observability layer
+├── main.tf                 # Core cluster compute provisioning blueprint
+├── namespace.tf            # Native cluster namespace baseline isolation
+├── outputs.tf              # Cloud outputs export configurations
+├── providers.tf            # Sourcing credentials (AWS, K8s, Helm)
+├── secrets.tf              # Sealed variables and sensitive value provisions
+└── variables.tf            # Input type constraints and variables schema
 ```
 
 ---
