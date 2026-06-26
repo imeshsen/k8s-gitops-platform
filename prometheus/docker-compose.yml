@@ -1,11 +1,11 @@
-services:
-  prometheus:
-    image: prom/prometheus
+prometheus:
+    image: prom/prometheus:latest
     ports:
       - "9090:9090"
     volumes:
-      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
 
-# No named volumes needed; comment out if you want to keep for future use
-volumes:
-  prometheus:
+networks:
+  default:
+    name: app-network
+    driver: bridge
