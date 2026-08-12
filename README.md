@@ -1,141 +1,249 @@
 # Kubernetes GitOps Platform
 
-A production‑grade, GitOps‑ready Kubernetes deployment skeleton structuring infrastructure provisioning (Terraform), cluster packaging (Helm), and continuous deployment (ArgoCD).
+This repository is a sample platform for deploying a Java backend, a React frontend, and supporting Kubernetes infrastructure using Terraform, Helm, and ArgoCD.
 
-## Repository Structure
+It is designed to demonstrate a GitOps-oriented architecture with:
 
-```
+- Terraform for cluster and infrastructure provisioning
+- Helm charts for application packaging
+- ArgoCD manifests for GitOps deployment
+- Kubernetes namespaces, secrets, and provider configuration
+- Minikube-based local environment setup
+
+---
+
+## Project overview
+
+The platform includes:
+
+- A Spring Boot backend under `application-sourcecodes/backend`
+- A React + TypeScript frontend under `application-sourcecodes/frontend`
+- Helm charts for the backend and frontend under `helm/`
+- ArgoCD application manifests under `argocd-manifests/`
+- Terraform configuration for Minikube under `terraform/environments/minikube`
+- Support modules for provider setup and secret creation under `terraform/modules/minikube`
+
+---
+
+## Repository structure
+
+```text
 k8s-gitops-platform/
-│
-├── application-sourcecodes/    # Source Application Code
-│   ├── backend/                # Spring Boot API (served on port 8080)
-│   │   ├── Dockerfile          # Multi-stage build configuration for Java
-│   │   ├── openapi.yaml        # API contracts and specifications
-│   │   ├── pom.xml             # Maven dependencies configuration
-│   │   └── src/                # Spring Boot Application source code
-│   │
-│   ├── docker-compose.yaml     # Local multi-container development environment
-│   │
-│   └── frontend/               # React / TypeScript Vite web client
-│       ├── Dockerfile          # Multi-stage production Nginx deployment
-│       ├── eslint.config.js    # Linting rules matching team standards
-│       ├── index.html          # Application entry point
-│       ├── nginx.conf          # Custom optimized reverse proxy / routing
-│       ├── package.json        # Frontend project metadata and dependencies
-│       ├── public/             # Static web assets (favicons, vectors)
-│       ├── src/                # Application components (TSX, CSS styles)
-│       └── tsconfig*.json      # TypeScript compiler workspace configurations
-│
-├── argocd-manifests/           # Continuous Deployment Manifests
-│   ├── app-of-apps.yaml        # ArgoCD Root Application (App-of-Apps pattern)
-│   ├── backend-app.yaml        # Backend service target tracking and sync policy
-│   └── frontend-app.yaml       # Frontend web client declarative sync policy
-│
-├── helm/                       # Enterprise Application Packaging
-│   ├── backend/                # Spring Boot service Helm chart configuration
-│   │   ├── Chart.yaml          # Packaging metadata and semantic versioning
-│   │   ├── templates/          # K8s objects (Deployment, HPA, Ingress, SVC)
-│   │   └── values.yaml         # Environment defaults and resource limits
-│   │
-│   └── frontend/               # Single Page Application Helm chart definition
-│       ├── Chart.yaml          # Web client package manifest
-│       ├── templates/          # Declarative K8s resources engine
-│       └── values.yaml         # Configurable parameters (replicas, image tags)
-│
-├── ingress/                    # Global Cluster Entrypoints
-│   └── nginx-ingress.yaml      # Path-based routing rules mappings
-│
-├── shellScripts/               # Platform Operator Automation Utilities
-│   ├── helm.sh                 # Routine chart validation and package manager
-│   ├── switchNS.sh             # Active Kubernetes namespace contextual toggle
-│   └── terraform.sh            # Idempotent cloud infrastructure deployment wrap
-│
-└── terraform/                  # Infrastructure as Code (IaC) Workspace
-├── grafana.tf              # Monitoring dashboards & observability layer
-├── main.tf                 # Core cluster compute provisioning blueprint
-├── namespace.tf            # Native cluster namespace baseline isolation
-├── outputs.tf              # Cloud outputs export configurations
-├── providers.tf            # Sourcing credentials (AWS, K8s, Helm)
-├── secrets.tf              # Sealed variables and sensitive value provisions
-└── variables.tf            # Input type constraints and variables schema
+├── README.md
+├── application-sourcecodes/
+│   ├── docker-compose.yaml
+│   ├── backend/
+│   │   ├── Dockerfile
+│   │   ├── openapi.yaml
+│   │   ├── pom.xml
+│   │   └── src/
+│   └── frontend/
+│       ├── Dockerfile
+│       ├── eslint.config.js
+│       ├── index.html
+│       ├── nginx.conf
+│       ├── package.json
+│       ├── public/
+│       ├── src/
+│       ├── tsconfig.app.json
+│       ├── tsconfig.json
+│       └── tsconfig.node.json
+├── argocd-manifests/
+│   ├── app-of-apps.yaml
+│   ├── backend-app.yaml
+│   └── frontend-app.yaml
+├── helm/
+│   ├── backend/
+│   │   ├── Chart.yaml
+│   │   ├── templates/
+│   │   ├── values.yaml
+│   │   └── charts/
+│   └── frontend/
+│       ├── Chart.yaml
+│       ├── templates/
+│       ├── values.yaml
+│       └── charts/
+├── ingress/
+│   └── nginx-ingress.yaml
+├── monitoring/
+│   ├── docker-compose.yml
+│   └── prometheus.yml
+├── shellScripts/
+│   ├── deployAppHelm.sh
+│   ├── grafana.sh
+│   ├── switchNS.sh
+│   └── terraform.sh
+├── terraform/
+│   ├── environments/
+│   │   └── minikube/
+│   │       ├── argocd.tf
+│   │       ├── minikube.tfvars
+│   │       ├── namespace.tf
+│   │       ├── outputs.tf
+│   │       ├── providers.tf
+│   │       ├── secrets.tf
+│   │       ├── var.tfvars.example
+│   │       ├── variables.tf
+│   │       └── .terraform/
+│   ├── modules/
+│   │   └── minikube/
+│   │       ├── providers/
+│   │       ├── secrets/
+│   │       └── namespace/
+│   ├── main.tf
+│   ├── minikube.tfvars
+│   ├── namespace.tf
+│   ├── outputs.tf
+│   ├── providers.tf
+│   ├── secrets.tf
+│   ├── var.tfvars.example
+│   └── variables.tf
+└── .gitignore
 ```
 
 ---
 
-## Getting Started
+## Prerequisites
 
-### 1. Provision Infrastructure
-Configure the Terraform workspaces inside the `terraform` folder to match your cloud architecture:
+Before running the platform, install the following tools:
+
+- Docker
+- kubectl
+- Helm
+- Terraform
+- Minikube
+- Java 17+ (for the backend build)
+- Node.js 18+ and npm (for the frontend build)
+
+---
+
+## Local Minikube setup
+
+The environment configuration is under:
+
+```text
+terraform/environments/minikube
+```
+
+### 1. Start Minikube
 
 ```bash
-cd terraform
+minikube start
+```
+
+### 2. Initialize Terraform
+
+```bash
+cd terraform/environments/minikube
 terraform init
-terraform plan
-terraform apply
 ```
 
-### 2. Run Applications Locally with Docker
-You can test the application components locally using Docker. A `docker-compose.yaml` is provided in the repository root.
-
-```yaml
-version: '3.8'
-services:
-  backend:
-    build:
-      context: "./application-sourcecodes/backend"
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-  frontend:
-    build:
-      context: "./application-sourcecodes/frontend"
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_URL=http://host.docker.internal:8080
-    depends_on:
-      - backend
-```
-
-Run the stack:
+### 3. Validate configuration
 
 ```bash
-docker compose up --build
+terraform validate
 ```
 
-The frontend will be available at `http://localhost:3000` and will automatically call the backend at `http://host.docker.internal:8080`.
+### 4. Review the plan
 
-### 3. Deploy via ArgoCD
-Apply the root application configuration to trigger the ArgoCD App‑of‑Apps synchronization engine:
+```bash
+terraform plan -var-file=minikube.tfvars
+```
+
+### 5. Apply infrastructure
+
+```bash
+terraform apply -var-file=minikube.tfvars
+```
+
+This environment uses variables such as:
+
+- `username`
+- `password`
+- `namespace`
+- `terraform_source`
+- `terraform_version`
+- `config_path`
+- `config_context`
+
+---
+
+## Application run flow
+
+### Backend
+
+```bash
+cd application-sourcecodes/backend
+mvn clean package
+java -jar target/*.jar
+```
+
+### Frontend
+
+```bash
+cd application-sourcecodes/frontend
+npm install
+npm run dev
+```
+
+### Docker Compose
+
+For a containerized local development run:
+
+```bash
+docker compose -f application-sourcecodes/docker-compose.yaml up --build
+```
+
+---
+
+## ArgoCD and GitOps
+
+The repository contains ArgoCD application definitions in `argocd-manifests/` to deploy the backend and frontend using a GitOps model.
+
+Typical flow:
 
 ```bash
 kubectl apply -f argocd-manifests/app-of-apps.yaml
 ```
 
----
-
-## Security Practices
-- All container base images use minimal‑footprint `alpine` builds to minimise attack surface.
-- The Spring Boot backend runs under an unprivileged user (`spring`) rather than root, and the frontend runs under `node`.
-- Resource constraints (`requests`/`limits`) are explicitly defined on all Helm charts to prevent Denial‑of‑Service attacks.
+This gives ArgoCD a root application to reconcile the child app manifests.
 
 ---
 
-## Development Notes
-- The frontend uses Vite's proxy during development (`vite.config.ts`) and falls back to `VITE_API_URL` environment variable in production.
-- The backend CORS configuration now allows calls from both `http://localhost:5173` (Vite dev server) and `http://localhost:3000` (preview container).
+## Helm deployment
+
+The Helm charts are under `helm/backend` and `helm/frontend`.
+
+Example:
+
+```bash
+helm install backend ./helm/backend -n default
+helm install frontend ./helm/frontend -n default
+```
 
 ---
 
-## Helm Notes for Grafana
-- How to get admin username and password
-  List helm charts in your namespace
-    helm list -n monitoring
-  Retrive admin password for your chart
-    kubectl get secret --namespace monitoring your_chart_name -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
-  
-- Access the grafana dashboard
-  kubectl port-forward svc/grafana 8081:80 --address 0.0.0.0.0
+## Useful scripts
+
+The repo includes helper scripts in `shellScripts/` for common platform tasks:
+
+- `deployAppHelm.sh`
+- `grafana.sh`
+- `switchNS.sh`
+- `terraform.sh`
+
+These are intended to simplify deployment and namespace switching during local and demo usage.
 
 ---
+
+## Notes
+
+- The Terraform configuration validates successfully in the Minikube environment.
+- The repo is structured as a demonstration platform and is meant to be adapted to your environment-specific Kubernetes cluster and secrets management workflow.
+- For production use, prefer a secure secret manager such as AWS Secrets Manager, Azure Key Vault, or Kubernetes external-secrets instead of plain tfvars values.
+
+---
+
+## License
+
+This project is intended for learning and demonstration purposes unless otherwise stated in repository files.
