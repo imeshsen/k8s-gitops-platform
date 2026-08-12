@@ -14,22 +14,3 @@ variable "namespace" {
   description = "The namespace for the applications"
 }
 
-variable "terraform_source" {
-    type = string
-    description = "Helm source"
-}
-
-variable "terraform_version" {
-    type = string
-    description = "Helm version"
-}
-
-variable "config_path" {
-  type        = string
-  description = "The path for the kube config"
-}
-
-variable "config_context" {
-  type        = string
-  description = "The cluster name"
-}
