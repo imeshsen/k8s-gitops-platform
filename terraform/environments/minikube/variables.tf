@@ -15,13 +15,13 @@ variable "namespace" {
 }
 
 variable "terraform_source" {
-    type = string
-    description = "Helm source"
+  type        = string
+  description = "Helm source"
 }
 
 variable "terraform_version" {
-    type = string
-    description = "Helm version"
+  type        = string
+  description = "Helm version"
 }
 
 variable "config_path" {

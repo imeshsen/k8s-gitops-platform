@@ -1,13 +1,6 @@
-resource "kubernetes_secret_v1" "secret" {
-  metadata {
-    name      = "basic-auth"
-    namespace = var.namespace
-  }
-
-  data = {
-    username = var.username
-    password = var.password
-  }
-
-  type = "kubernetes.io/basic-auth"
+module "minikube_secrets" {
+  source    = "../../modules/minikube/secrets"
+  namespace = var.namespace
+  username  = var.username
+  password  = var.password
 }

@@ -1,20 +1,17 @@
-terraform {
-  required_providers {
-    helm = {
-      source  = "hashicorp/helm"
-      version = "~> 2.13"
-    }
-  }
+module "terraform" {
+  source            = "../../modules/minikube/providers/terraform"
+  terraform_source  = var.terraform_source
+  terraform_version = var.terraform_version
 }
 
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
-    config_context = "minikube"
-  }
+module "helm" {
+  source         = "../../modules/minikube/providers/helm"
+  config_path    = var.config_path
+  config_context = var.config_context
 }
 
-provider "kubernetes" {
-  config_path = "~/.kube/config"
-  config_context = "minikube"
+module "kubernetes" {
+  source         = "../../modules/minikube/providers/k8s"
+  config_path    = var.config_path
+  config_context = var.config_context
 }
