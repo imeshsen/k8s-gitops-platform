@@ -14,9 +14,14 @@ variable "namespace" {
   description = "The namespace for the applications"
 }
 
-variable "namespace" {
-  type        = string
-  description = "Minikube cluster namespace"
+variable "terraform_source" {
+    type = string
+    description = "Helm source"
+}
+
+variable "terraform_version" {
+    type = string
+    description = "Helm version"
 }
 
 variable "config_path" {
