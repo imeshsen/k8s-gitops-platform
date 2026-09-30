@@ -1,0 +1,9 @@
+# Frontend (React + nginx) overrides for helm/app
+fullnameOverride: frontend
+
+image:
+  repository: spims96/k8s-stack-front
+  tag: "v1"
+
+service:
+  port: 3000

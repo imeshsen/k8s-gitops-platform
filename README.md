@@ -18,7 +18,7 @@ The platform includes:
 
 - A Spring Boot backend under `application-sourcecodes/backend`
 - A React + TypeScript frontend under `application-sourcecodes/frontend`
-- Helm charts for the backend and frontend under `helm/`
+- A single shared Helm chart (`helm/app`) with per-app values files under `helm/`
 - ArgoCD application manifests under `argocd-manifests/`
 - Terraform configuration for Minikube under `terraform/environments/minikube`
 - Support modules for provider setup and secret creation under `terraform/modules/minikube`
@@ -214,14 +214,16 @@ This gives ArgoCD a root application to reconcile the child app manifests. Both 
 
 ## Helm deployment
 
-The Helm charts are under `helm/backend` and `helm/frontend`.
+Both apps are deployed from one generic chart, `helm/app`. Shared defaults live in `helm/app/values.yaml`; each app's differences (image, port, probes) live in `helm/values-<app>.yaml`. `fullnameOverride` keeps the service names `backend` and `frontend`, which the ingress relies on.
 
 Example:
 
 ```bash
-helm install backend ./helm/backend -n k8s --create-namespace
-helm install frontend ./helm/frontend -n k8s
+helm upgrade --install backend  ./helm/app -n k8s --create-namespace -f helm/values-backend.yaml
+helm upgrade --install frontend ./helm/app -n k8s -f helm/values-frontend.yaml
 ```
+
+To add another app, create `helm/values-<app>.yaml` and an ArgoCD `Application` pointing at `helm/app` with that values file.
 
 ---
 

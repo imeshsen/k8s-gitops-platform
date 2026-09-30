@@ -8,7 +8,10 @@ spec:
   source:
     repoURL: 'https://github.com/imeshsen/k8s-gitops-platform.git'
     targetRevision: HEAD
-    path: helm/frontend
+    path: helm/app
+    helm:
+      valueFiles:
+        - ../values-frontend.yaml
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: k8s

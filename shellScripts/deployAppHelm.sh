@@ -1,9 +1,10 @@
 #!/bin/bash
 
-for chart in backend frontend
+for app in backend frontend
 do
-  echo "deploying $chart..........."
-  helm upgrade --install $chart ../helm/$chart \
+  echo "deploying $app..........."
+  helm upgrade --install $app ../helm/app \
+    -f ../helm/values-$app.yaml \
     --namespace k8s \
     --create-namespace
 done

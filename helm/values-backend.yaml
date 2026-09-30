@@ -1,0 +1,20 @@
+# Backend (Spring Boot) overrides for helm/app
+fullnameOverride: backend
+
+image:
+  repository: spims96/k8s-stack-api
+  tag: "v1"
+
+service:
+  port: 8080
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health/liveness
+    port: http
+  initialDelaySeconds: 20
+readinessProbe:
+  httpGet:
+    path: /actuator/health/readiness
+    port: http
+  initialDelaySeconds: 10

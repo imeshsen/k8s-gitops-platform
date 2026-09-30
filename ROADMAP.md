@@ -53,11 +53,11 @@ Ordered by suggested sequence — later items build on earlier ones.
       build the backend (`application-sourcecodes/backend/Dockerfile`) and
       frontend (`application-sourcecodes/frontend/Dockerfile`) images, tag
       with the git SHA, push to ECR (new) or Docker Hub (matches current
-      `spims96/k8s-stack-api` convention in `helm/backend/values.yaml`).
+      `spims96/k8s-stack-api` convention in `helm/values-backend.yaml`).
 
 - [ ] **3.2 Auto-bump Helm values on new image**
       Add a CI step (or a tool like Argo Image Updater) that updates
-      `helm/backend/values.yaml` / `helm/frontend/values.yaml` image tags
+      `helm/values-backend.yaml` / `helm/values-frontend.yaml` image tags
       after a successful build, so ArgoCD's `selfHeal`/`automated` sync in
       `argocd-manifests/*.yaml` picks up the new version automatically.
 
@@ -77,7 +77,8 @@ Ordered by suggested sequence — later items build on earlier ones.
 
 - [ ] **4.1 IAM Roles for Service Accounts (IRSA)**
       Give the backend's `serviceAccount` (see
-      `helm/backend/templates/serviceaccount.yaml`) a real IAM role via
+      `helm/app/templates/serviceaccount.yaml`, set via `serviceAccount.annotations` in
+      `helm/values-backend.yaml`) a real IAM role via
       annotation, scoped to only what it needs (e.g. Secrets Manager read).
       Good hands-on IAM least-privilege practice.
 
@@ -102,7 +103,7 @@ Ordered by suggested sequence — later items build on earlier ones.
 ## Phase 6 — Polish
 
 - [ ] **6.1 Set resource requests/limits and a non-empty `securityContext`**
-      Both `helm/backend/values.yaml` and `helm/frontend/values.yaml` leave
+      The shared `helm/app/values.yaml` leaves
       `resources: {}` and `securityContext: {}` as scaffolding defaults —
       fill these in (the backend Dockerfile already runs as non-root, so
       `runAsNonRoot: true` costs nothing to add).
