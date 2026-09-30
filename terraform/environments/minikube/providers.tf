@@ -11,6 +11,6 @@ module "helm" {
 }
 
 provider "kubernetes" {
-  config_path    = "~/.kube/config"
-  config_context = "minikube"
+  config_path    = var.config_path
+  config_context = var.config_context
 }

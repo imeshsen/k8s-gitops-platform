@@ -1,17 +1,20 @@
 #!/bin/bash
+set -e
 
-echo "Validating terraform config"
-terraform -chdir=../terraform validate
-
-echo "Formatting terraform config"
-terraform -chdir=../terraform fmt
+TF_DIR=../terraform/environments/minikube
+VAR_FILE=minikube.tfvars
 
 echo "Initializing"
-terraform -chdir=../terraform init
+terraform -chdir=$TF_DIR init
 
+echo "Formatting terraform config"
+terraform -chdir=$TF_DIR fmt -recursive
+
+echo "Validating terraform config"
+terraform -chdir=$TF_DIR validate
 
 echo "Preview changes terraform config"
-terraform -chdir=../terraform plan
+terraform -chdir=$TF_DIR plan -var-file=$VAR_FILE
 
 echo "Applying the changes"
-terraform -chdir=../terraform apply
+terraform -chdir=$TF_DIR apply -var-file=$VAR_FILE

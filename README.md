@@ -135,6 +135,7 @@ minikube start
 
 ```bash
 cd terraform/environments/minikube
+cp minikube.tfvars.example minikube.tfvars   # then edit values (gitignored)
 terraform init
 ```
 
@@ -204,9 +205,10 @@ Typical flow:
 
 ```bash
 kubectl apply -f argocd-manifests/app-of-apps.yaml
+kubectl apply -f ingress/nginx-ingress.yaml   # requires: minikube addons enable ingress
 ```
 
-This gives ArgoCD a root application to reconcile the child app manifests.
+This gives ArgoCD a root application to reconcile the child app manifests. Both apps deploy into the `k8s` namespace; the ingress routes `/api` to the backend and everything else to the frontend.
 
 ---
 
@@ -217,8 +219,8 @@ The Helm charts are under `helm/backend` and `helm/frontend`.
 Example:
 
 ```bash
-helm install backend ./helm/backend -n default
-helm install frontend ./helm/frontend -n default
+helm install backend ./helm/backend -n k8s --create-namespace
+helm install frontend ./helm/frontend -n k8s
 ```
 
 ---
