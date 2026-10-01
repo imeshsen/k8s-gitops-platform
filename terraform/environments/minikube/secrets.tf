@@ -3,4 +3,6 @@ module "minikube_secrets" {
   namespace = var.namespace
   username  = var.username
   password  = var.password
+
+  depends_on = [module.namespace]
 }

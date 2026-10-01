@@ -1,5 +1,5 @@
 variable "namespace" {
-  type        = string
+  type        = set(string)
   description = "K8s namespace"
 }
 

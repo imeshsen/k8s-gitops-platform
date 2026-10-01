@@ -10,12 +10,12 @@ variable "password" {
 }
 
 variable "namespace" {
-  type        = string
+  type        = set(string)
   description = "The namespace for the applications"
 }
 
 variable "terraform_source" {
-  type        = set(string)
+  type        = string
   description = "Helm source"
 }
 

@@ -1,11 +1,13 @@
 resource "kubernetes_namespace_v1" "k8s" {
+  for_each = var.namespace
+
   metadata {
     annotations = {
-      name = var.namespace
+      name = each.value
     }
     labels = {
-      mylabel = var.namespace
+      mylabel = each.value
     }
-    name = var.namespace
+    name = each.value
   }
 }

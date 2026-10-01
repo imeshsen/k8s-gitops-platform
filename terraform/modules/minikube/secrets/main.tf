@@ -1,7 +1,9 @@
 resource "kubernetes_secret_v1" "secret" {
+  for_each = var.namespace
+
   metadata {
     name      = "basic-auth"
-    namespace = var.namespace
+    namespace = each.value
   }
 
   data = {
