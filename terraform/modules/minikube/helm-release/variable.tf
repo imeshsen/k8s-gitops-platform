@@ -34,3 +34,9 @@ variable "values" {
   description = "Values files content passed to the chart"
   default     = []
 }
+
+variable "timeout" {
+  type        = number
+  description = "Seconds to wait for the release to become ready"
+  default     = 600
+}

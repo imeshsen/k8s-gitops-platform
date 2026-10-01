@@ -3,7 +3,7 @@ module "prometheus" {
   name          = "prometheus"
   repository    = "https://prometheus-community.github.io/helm-charts"
   chart         = "prometheus"
-  chart_version = "13.7.0"
+  chart_version = "29.35.0"
   namespace     = "monitoring"
 
   depends_on = [module.namespace]

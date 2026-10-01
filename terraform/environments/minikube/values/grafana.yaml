@@ -1,0 +1,42 @@
+admin:
+  existingSecret: basic-auth
+  userKey: username
+  passwordKey: password
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.monitoring.svc.cluster.local
+        access: proxy
+        isDefault: true
+
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - name: default
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+
+dashboards:
+  default:
+    node-exporter-full:
+      gnetId: 1860
+      revision: 45
+      datasource:
+        - name: DS_PROMETHEUS
+          value: Prometheus
+    kubernetes-global:
+      gnetId: 15757
+      revision: 43
+      datasource:
+        - name: DS_PROMETHEUS
+          value: Prometheus

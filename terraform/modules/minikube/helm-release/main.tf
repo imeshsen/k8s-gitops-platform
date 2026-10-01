@@ -6,4 +6,5 @@ resource "helm_release" "release" {
   create_namespace = var.create_namespace
   version          = var.chart_version
   values           = var.values
+  timeout          = var.timeout
 }
