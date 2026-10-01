@@ -1,4 +1,4 @@
 variable "namespace" {
-  type        = string
-  description = "Minikube cluster namespace"
+  type        = set(string)
+  description = "Cluster namespace"
 }

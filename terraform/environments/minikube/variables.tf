@@ -15,7 +15,7 @@ variable "namespace" {
 }
 
 variable "terraform_source" {
-  type        = string
+  type        = set(string)
   description = "Helm source"
 }
 
